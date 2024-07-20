@@ -1,9 +1,3 @@
-import { SVGProps } from "react";
-
-export type IconSvgProps = SVGProps<SVGSVGElement> & {
-  size?: number;
-};
-
 export interface Trip {
   trip_id: number;
   delegation_id: number;
