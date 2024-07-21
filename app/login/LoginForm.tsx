@@ -3,11 +3,11 @@ import { Button } from "@nextui-org/button";
 import { Checkbox } from "@nextui-org/checkbox";
 import { Input } from "@nextui-org/input";
 import Link from "next/link";
-import { registerUserAction } from "../data/actions/auth-actions";
+import { loginUserAction } from "../data/actions/auth-actions";
 
 export default function LoginForm() {
   return (
-    <form action={registerUserAction}>
+    <form action={loginUserAction}>
       <div className="flex flex-col gap-4 min-w-96">
         <h1 className="text-3xl font-semibold pb-4">Log In 👋</h1>
         <Input
