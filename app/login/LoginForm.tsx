@@ -1,3 +1,5 @@
+"use client";
+
 import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import { Button } from "@nextui-org/button";
 import { Checkbox } from "@nextui-org/checkbox";

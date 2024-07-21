@@ -2,16 +2,6 @@
 
 import { schemaRegister } from "@/app/types/validation";
 
-// Utility function to update state
-function updateState(prevState: any, updates: any) {
-  return {
-    ...prevState,
-    zodErrors: null,
-    message: null,
-    ...updates,
-  };
-}
-
 export async function registerUserAction(prevState: any, formData: FormData) {
   const validatedFields = schemaRegister.safeParse({
     first_name: formData.get("firstName"),
@@ -21,9 +11,11 @@ export async function registerUserAction(prevState: any, formData: FormData) {
   });
 
   if (!validatedFields.success) {
-    return updateState(prevState, {
+    return {
+      ...prevState,
       zodErrors: validatedFields.error.flatten().fieldErrors,
-    });
+      message: null,
+    };
   }
 
   try {
@@ -34,24 +26,25 @@ export async function registerUserAction(prevState: any, formData: FormData) {
       },
       body: JSON.stringify(validatedFields.data),
     });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      return updateState(prevState, {
-        message: errorData.message || "Failed to Register.",
-      });
-    }
-
     const responseData = await response.json();
-    return updateState(prevState, {
-      message: "Registration successful.",
-      data: responseData,
-    });
+
+    if (!responseData) {
+      return {
+        ...prevState,
+        zodErrors: null,
+        message: "Ops! Something went wrong. Please try again.",
+      };
+    }
+    if (responseData) {
+      return {
+        ...prevState,
+        zodErrors: null,
+        message: responseData.message ? responseData.message : null,
+      };
+    }
   } catch (error) {
-    console.error(error);
-    return updateState(prevState, {
-      message: "Ops! Something went wrong. Please try again later.",
-    });
+    console.error("Error:", error);
+    // Handle error here (e.g., showing an error message to the user)
   }
 }
 

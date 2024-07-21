@@ -1,3 +1,5 @@
+"use client";
+
 import {
   EnvelopeIcon,
   LockClosedIcon,
@@ -7,10 +9,23 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 import Link from "next/link";
 import { registerUserAction } from "../data/actions/auth-actions";
+import { useFormState } from "react-dom";
+import { ErrorMessage } from "@/components/AuthErrorMessage";
+import SubmitButton from "./SubmitButton";
+
+const INITIAL_STATE = {
+  data: null,
+};
 
 export default function SignUpForm() {
+  const [formState, formAction] = useFormState(
+    registerUserAction,
+    INITIAL_STATE,
+  );
+
+  console.log(formState);
   return (
-    <form action={registerUserAction}>
+    <form action={formAction}>
       <div className="flex flex-col gap-4 min-w-96">
         <h1 className="text-3xl font-semibold pb-4">Sign Up 🎉</h1>
         <Input
@@ -23,6 +38,8 @@ export default function SignUpForm() {
           labelPlacement="outside"
           placeholder="Enter your first name"
           variant="bordered"
+          isInvalid={formState?.zodErrors?.first_name}
+          errorMessage={formState?.zodErrors?.first_name}
         />
         <Input
           endContent={
@@ -33,6 +50,8 @@ export default function SignUpForm() {
           labelPlacement="outside"
           placeholder="Enter your last name"
           variant="bordered"
+          isInvalid={formState?.zodErrors?.last_name}
+          errorMessage={formState?.zodErrors?.last_name}
         />
         <Input
           endContent={
@@ -43,6 +62,8 @@ export default function SignUpForm() {
           labelPlacement="outside"
           placeholder="Enter your email"
           variant="bordered"
+          isInvalid={formState?.zodErrors?.email}
+          errorMessage={formState?.zodErrors?.email}
         />
         <Input
           endContent={
@@ -54,10 +75,10 @@ export default function SignUpForm() {
           placeholder="Enter your password"
           type="password"
           variant="bordered"
+          isInvalid={formState?.zodErrors?.password}
+          errorMessage={formState?.zodErrors?.password}
         />
-        <Button type="submit" color="primary">
-          Sign Up
-        </Button>
+        <SubmitButton /> <ErrorMessage message={formState.message} />
         <Button
           as={Link}
           href="/login"
