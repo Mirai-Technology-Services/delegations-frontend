@@ -1,6 +1,6 @@
 "use server";
 
-import { schemaRegister } from "@/app/types/validation";
+import { schemaRegister, schemaLogin } from "@/app/types/validation";
 
 // Utility function to update state
 function updateState(prevState: any, updates: any) {
@@ -55,13 +55,19 @@ export async function registerUserAction(prevState: any, formData: FormData) {
   }
 }
 
-export async function loginUserAction(formData: FormData) {
-  const fields = {
+export async function loginUserAction(prevState: any, formData: FormData) {
+  const validatedFields = schemaLogin.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
-  };
+  });
 
-  console.debug(JSON.stringify(fields));
+  console.log(validatedFields);
+
+  if (!validatedFields.success) {
+    return updateState(prevState, {
+      zodErrors: validatedFields.error.flatten().fieldErrors,
+    });
+  }
 
   try {
     const response = await fetch("http://localhost:3001/api/auth/login", {
@@ -69,18 +75,25 @@ export async function loginUserAction(formData: FormData) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(fields),
+      body: JSON.stringify(validatedFields.data),
     });
 
     if (!response.ok) {
-      throw new Error("Network response was not ok" + response.statusText);
+      const errorData = await response.json();
+      return updateState(prevState, {
+        message: errorData.message || "Failed to login.",
+      });
     }
 
-    const data = await response.json();
-    console.log("Success:", data);
-    // Handle successful login here (e.g., redirecting the user, setting cookies, etc.)
+    const responseData = await response.json();
+    return updateState(prevState, {
+      message: "Login successful.",
+      data: responseData,
+    });
   } catch (error) {
     console.error("Error:", error);
-    // Handle error here (e.g., showing an error message to the user)
+    return updateState(prevState, {
+      message: "Ops! Something went wrong. Please try again later.",
+    });
   }
 }

@@ -78,7 +78,8 @@ export default function SignUpForm() {
           isInvalid={formState?.zodErrors?.password}
           errorMessage={formState?.zodErrors?.password}
         />
-        <SubmitButton /> <ErrorMessage message={formState.message} />
+        <SubmitButton />
+        <ErrorMessage message={formState.message} />
         <Button
           as={Link}
           href="/login"

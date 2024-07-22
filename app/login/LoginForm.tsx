@@ -5,11 +5,20 @@ import { Button } from "@nextui-org/button";
 import { Checkbox } from "@nextui-org/checkbox";
 import { Input } from "@nextui-org/input";
 import Link from "next/link";
+import { useFormState } from "react-dom";
 import { loginUserAction } from "../data/actions/auth-actions";
+import { ErrorMessage } from "@/components/AuthErrorMessage";
+import SubmitButton from "./SubmitButton";
+
+const INITIAL_STATE = {
+  data: null,
+};
 
 export default function LoginForm() {
+  const [formState, formAction] = useFormState(loginUserAction, INITIAL_STATE);
+
   return (
-    <form action={loginUserAction}>
+    <form action={formAction}>
       <div className="flex flex-col gap-4 min-w-96">
         <h1 className="text-3xl font-semibold pb-4">Log In 👋</h1>
         <Input
@@ -22,6 +31,8 @@ export default function LoginForm() {
           labelPlacement="outside"
           placeholder="Enter your email"
           variant="bordered"
+          isInvalid={formState?.zodErrors?.email}
+          errorMessage={formState?.zodErrors?.email}
         />
         <Input
           endContent={
@@ -33,6 +44,8 @@ export default function LoginForm() {
           placeholder="Enter your password"
           type="password"
           variant="bordered"
+          isInvalid={formState?.zodErrors?.password}
+          errorMessage={formState?.zodErrors?.password}
         />
         <div className="flex py-2 px-1 justify-between">
           <Checkbox
@@ -42,13 +55,12 @@ export default function LoginForm() {
           >
             Remember me
           </Checkbox>
-          <Link color="primary" href="#">
+          <Link className="text-sm" color="primary" href="#">
             Forgot password?
           </Link>
         </div>
-        <Button type="submit" color="primary">
-          Log In
-        </Button>
+        <ErrorMessage message={formState.message} />
+        <SubmitButton />
         <Button
           as={Link}
           href="/signup"
