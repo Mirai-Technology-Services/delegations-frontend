@@ -2,7 +2,6 @@
 
 import { schemaStartTrip } from "@/app/types/validation"; // Define your validation schema
 import { fetchWithAuth } from "../utils/fetchWithAuth";
-import { redirect } from "next/navigation";
 
 // Utility function to update state
 function updateState(prevState: any, updates: any) {
@@ -49,7 +48,10 @@ export async function startTripAction(prevState: any, formData: FormData) {
       },
     );
 
-    redirect("/trips");
+    return updateState(prevState, {
+      message: "Trip started successfully.",
+      data: responseData,
+    });
   } catch (error) {
     console.error(error);
     return updateState(prevState, {

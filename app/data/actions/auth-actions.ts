@@ -2,7 +2,6 @@
 
 import { schemaRegister, schemaLogin } from "@/app/types/validation";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 // Utility function to update state
 function updateState(prevState: any, updates: any) {
