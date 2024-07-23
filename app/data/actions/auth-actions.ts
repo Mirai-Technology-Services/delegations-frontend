@@ -1,6 +1,8 @@
 "use server";
 
 import { schemaRegister, schemaLogin } from "@/app/types/validation";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 // Utility function to update state
 function updateState(prevState: any, updates: any) {
@@ -61,8 +63,6 @@ export async function loginUserAction(prevState: any, formData: FormData) {
     password: formData.get("password"),
   });
 
-  console.log(validatedFields);
-
   if (!validatedFields.success) {
     return updateState(prevState, {
       zodErrors: validatedFields.error.flatten().fieldErrors,
@@ -76,6 +76,7 @@ export async function loginUserAction(prevState: any, formData: FormData) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(validatedFields.data),
+      credentials: "include", // Ensure cookies are included
     });
 
     if (!response.ok) {
@@ -86,14 +87,14 @@ export async function loginUserAction(prevState: any, formData: FormData) {
     }
 
     const responseData = await response.json();
-    return updateState(prevState, {
-      message: "Login successful.",
-      data: responseData,
-    });
+
+    cookies().set("auth", responseData.token);
   } catch (error) {
     console.error("Error:", error);
     return updateState(prevState, {
       message: "Ops! Something went wrong. Please try again later.",
     });
+  } finally {
+    redirect("/dashboard");
   }
 }

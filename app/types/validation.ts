@@ -23,3 +23,12 @@ export const schemaLogin = z.object({
     message: "Password must be between 6 and 100 characters",
   }),
 });
+
+export const schemaStartTrip = z.object({
+  location: z.string().min(1, { message: "Start location is required" }),
+  meter: z.number().positive({ message: "Valid meter reading is required" }),
+  time: z.string().min(1, { message: "Start time is required" }), // assuming time is passed as string
+  delegation_id: z
+    .number()
+    .positive({ message: "Valid delegation ID is required" }),
+});

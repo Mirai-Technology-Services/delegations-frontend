@@ -13,6 +13,7 @@ const AuthButton = () => {
       .split("; ")
       .find((row) => row.startsWith("auth="));
     setIsAuthenticated(!!token);
+    console.log("isAuthenticated", isAuthenticated);
   }, []);
 
   const handleLogout = () => {

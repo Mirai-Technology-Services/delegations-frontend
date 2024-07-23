@@ -54,9 +54,7 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden md:flex">
-          <Button as={Link} color="primary" href="/login" variant="flat">
-            Login
-          </Button>
+          <AuthButton />
         </NavbarItem>
       </NavbarContent>
 
