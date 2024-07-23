@@ -1,27 +1,14 @@
 import Link from "next/link";
 import { Trip } from "../../types";
 import { Button } from "@nextui-org/button";
-import { cookies } from "next/headers";
 import TripsTable from "./TripsTable";
+import { fetchWithAuth } from "../data/utils/fetchWithAuth";
 
-const getCookie = async (name: string) => {
-  return cookies().get(name)?.value ?? "";
-};
+async function fetchTrips(): Promise<Trip[]> {
+  const url = "http://localhost:3001/api/trips";
+  const response = await fetchWithAuth(url);
 
-async function fetchTrips() {
-  const cookie = await getCookie("auth");
-
-  const res = await fetch("http://localhost:3001/api/trips", {
-    cache: "no-store",
-    credentials: "include",
-    headers: {
-      Cookie: `auth=${cookie};`,
-    },
-  });
-
-  const json = await res.json();
-  const trips: Trip[] = json.body;
-
+  const trips: Trip[] = response.body;
   return trips;
 }
 
