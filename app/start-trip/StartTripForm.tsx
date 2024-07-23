@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPinIcon, ClockIcon } from "@heroicons/react/24/outline";
+import { MapPinIcon } from "@heroicons/react/24/outline";
 import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 import Link from "next/link";
@@ -27,22 +27,6 @@ export default function StartTripForm(props: StartTripFormProps) {
   const [startLocation, setStartLocation] = useState(props.startLocation);
   const [meterStart, setMeterStart] = useState(props.startMeter.toString());
 
-  const handleUseCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setStartLocation(`Lat: ${latitude}, Lon: ${longitude}`);
-        },
-        (error) => {
-          console.error("Error getting current location", error);
-        },
-      );
-    } else {
-      console.error("Geolocation is not supported by this browser.");
-    }
-  };
-
   return (
     <form action={formAction}>
       <div className="flex flex-col gap-4 min-w-96">
@@ -63,9 +47,6 @@ export default function StartTripForm(props: StartTripFormProps) {
           isInvalid={formState?.zodErrors?.location}
           errorMessage={formState?.zodErrors?.location}
         />
-        <Button onClick={handleUseCurrentLocation} variant="bordered">
-          Use Current Location
-        </Button>
         <Input
           value={meterStart}
           onChange={(e) => setMeterStart(e.target.value)}
@@ -84,8 +65,10 @@ export default function StartTripForm(props: StartTripFormProps) {
         />
         <DatePicker
           label="Start Time"
+          labelPlacement="outside"
           variant="bordered"
           hideTimeZone
+          hourCycle={24}
           showMonthAndYearPickers
           defaultValue={now(getLocalTimeZone())}
           name="time"
@@ -95,8 +78,8 @@ export default function StartTripForm(props: StartTripFormProps) {
           type="hidden"
           value={props.delegationNumber.toString()}
         />
-        <ErrorMessage message={formState.message} />
         <SubmitButton />
+        <ErrorMessage message={formState.message} />
         <Button
           as={Link}
           href="/delegations"

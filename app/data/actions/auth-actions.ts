@@ -94,7 +94,5 @@ export async function loginUserAction(prevState: any, formData: FormData) {
     return updateState(prevState, {
       message: "Ops! Something went wrong. Please try again later.",
     });
-  } finally {
-    redirect("/dashboard");
   }
 }

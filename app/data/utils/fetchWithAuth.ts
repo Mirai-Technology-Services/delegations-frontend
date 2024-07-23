@@ -30,9 +30,12 @@ export const fetchWithAuth = async (
     },
   });
 
+  const json = await res.json();
+
   if (!res.ok) {
+    console.log(json);
     throw new Error(`Fetch failed with status: ${res.status}`);
   }
 
-  return res.json();
+  return json;
 };
