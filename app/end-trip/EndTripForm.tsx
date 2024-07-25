@@ -98,11 +98,11 @@ export default function EndTripForm(props: EndTripFormProps) {
         <SubmitButton />
         <Button
           as={Link}
-          href="/delegations"
+          href="/dashboard"
           variant="light"
           className="text-primary"
         >
-          Back to Delegations
+          Back to Dashboard
         </Button>
       </div>
     </form>

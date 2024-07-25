@@ -17,21 +17,21 @@ const INITIAL_STATE = {
 };
 
 interface StartTripFormProps {
-  delegationNumber: number;
-  startLocation: string;
-  startMeter: number;
+  delegation_id: number;
+  location: string;
+  meter: number;
 }
 
 export default function StartTripForm(props: StartTripFormProps) {
   const [formState, formAction] = useFormState(startTripAction, INITIAL_STATE);
-  const [startLocation, setStartLocation] = useState(props.startLocation);
-  const [meterStart, setMeterStart] = useState(props.startMeter.toString());
+  const [startLocation, setStartLocation] = useState(props.location);
+  const [meterStart, setMeterStart] = useState(props.meter.toString());
 
   return (
     <form action={formAction}>
       <div className="flex flex-col gap-4 min-w-96">
         <h1 className="text-3xl font-semibold pb-4">
-          New Delegation: {props.delegationNumber} 🚚
+          New Delegation: {props.delegation_id} 🚚
         </h1>
         <Input
           value={startLocation}
@@ -76,17 +76,17 @@ export default function StartTripForm(props: StartTripFormProps) {
         <Input
           name="delegation_id"
           type="hidden"
-          value={props.delegationNumber.toString()}
+          value={props.delegation_id.toString()}
         />
         <SubmitButton />
         <ErrorMessage message={formState.message} />
         <Button
           as={Link}
-          href="/delegations"
+          href="/dashboard"
           variant="light"
           className="text-primary"
         >
-          Back to Delegations
+          Back to Dashboard
         </Button>
       </div>
     </form>

@@ -1,21 +1,29 @@
 import Link from "next/link";
 import { Button } from "@nextui-org/button";
+import { fetchWithAuth } from "../data/utils/fetchWithAuth";
+import OngoingTrip from "./OngoingTrip";
+import TripsTable from "../trips/TripsTable";
+import NoDelegation from "./NoDelegation";
+import DelegationNoTrip from "./DelegationNoTrip";
+import DelegationTrip from "./DelegationTrip";
+
+async function fetchDashboardInfo() {
+  const url = "http://localhost:3001/api/trips/dashboard";
+  var response = await fetchWithAuth(url);
+  return response.body; // Return the response body directly
+}
 
 export default async function Dashboard() {
-  return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-      <div className="flex gap-4 mb-4">
-        <Link href="/start-trip">
-          <Button color="primary">Start Trip</Button>
-        </Link>
-        <Link href="/end-trip">
-          <Button color="primary">End Trip</Button>
-        </Link>
-        <Link href="/make-pdf">
-          <Button color="primary">Generate Report</Button>
-        </Link>
-      </div>
-    </div>
-  );
+  const dashboardInfo = await fetchDashboardInfo();
+  console.log(dashboardInfo);
+
+  if (!dashboardInfo.hasActiveDelegation) {
+    return <NoDelegation />;
+  }
+
+  if (!dashboardInfo.hasActiveTrip) {
+    return <DelegationNoTrip delegation={dashboardInfo.activeDelegation} />;
+  }
+
+  return <DelegationTrip delegation={dashboardInfo.activeDelegation} />;
 }
