@@ -48,8 +48,8 @@ const TripsTable: React.FC<TripsTableProps> = ({ trips }) => {
             <TableCell>{trip.start_location}</TableCell>
             <TableCell>{trip.end_location}</TableCell>
             <TableCell>{trip.trip_description || "N/A"}</TableCell>
-            <TableCell>{trip.meter_start}</TableCell>
-            <TableCell>{trip.meter_end}</TableCell>
+            <TableCell>{trip.start_meter}</TableCell>
+            <TableCell>{trip.end_meter}</TableCell>
             <TableCell>{trip.car_id}</TableCell>
             <TableCell>{trip.remarks || "N/A"}</TableCell>
             <TableCell>

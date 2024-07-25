@@ -13,8 +13,8 @@ export interface Trip {
   start_location: string;
   end_location: string;
   trip_description?: string;
-  meter_start: number;
-  meter_end: number;
+  start_meter: number;
+  end_meter: number;
   car_id: number;
   remarks?: string;
   last_updated: string;

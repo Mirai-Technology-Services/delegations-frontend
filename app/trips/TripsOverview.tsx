@@ -20,10 +20,10 @@ export default function TripsOverview({ trips }: TripsOverviewProps) {
     <Table aria-label="Trips Table">
       <TableHeader>
         <TableColumn>Start Time</TableColumn>
-        <TableColumn>End Time</TableColumn>
         <TableColumn>Start Location</TableColumn>
-        <TableColumn>End Location</TableColumn>
         <TableColumn>Meter Start</TableColumn>
+        <TableColumn>End Time</TableColumn>
+        <TableColumn>End Location</TableColumn>
         <TableColumn>Meter End</TableColumn>
       </TableHeader>
       <TableBody items={trips}>
@@ -32,13 +32,13 @@ export default function TripsOverview({ trips }: TripsOverviewProps) {
             <TableCell>
               {format(new Date(trip.start_time), "yyyy-MM-dd HH:mm:ss")}
             </TableCell>
+            <TableCell>{trip.start_location}</TableCell>
+            <TableCell>{trip.start_meter}</TableCell>
             <TableCell>
               {format(new Date(trip.end_time), "yyyy-MM-dd HH:mm:ss")}
             </TableCell>
-            <TableCell>{trip.start_location}</TableCell>
             <TableCell>{trip.end_location}</TableCell>
-            <TableCell>{trip.meter_start}</TableCell>
-            <TableCell>{trip.meter_end}</TableCell>
+            <TableCell>{trip.end_meter}</TableCell>
           </TableRow>
         )}
       </TableBody>
