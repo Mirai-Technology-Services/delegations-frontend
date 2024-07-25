@@ -1,6 +1,6 @@
 "use server";
 
-import { schemaStartTrip } from "@/app/types/validation"; // Define your validation schema
+import { schemaStartTrip } from "@/app/types/validation";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
 
 // Utility function to update state
@@ -16,23 +16,19 @@ function updateState(prevState: any, updates: any) {
 // Action to start a new trip
 export async function startTripAction(prevState: any, formData: FormData) {
   const validatedFields = schemaStartTrip.safeParse({
-    location: formData.get("location"),
-    meter: Number(formData.get("meter")),
+    start_location: formData.get("location"),
+    start_meter: Number(formData.get("meter")),
     // time: formData.get("time"),
-    delegation_id: Number(formData.get("delegation_id")),
   });
 
   if (!validatedFields.success) {
+    console.error(validatedFields.error.flatten().fieldErrors);
     return updateState(prevState, {
       zodErrors: validatedFields.error.flatten().fieldErrors,
     });
   }
 
-  // Append type: "start" to the validated data
-  const tripData = {
-    ...validatedFields.data,
-    type: "start",
-  };
+  const tripData = { ...validatedFields.data, car_id: 1 };
 
   console.log(JSON.stringify(tripData));
 
